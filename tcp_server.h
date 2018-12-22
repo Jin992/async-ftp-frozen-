@@ -9,7 +9,8 @@
 
 class tcp_server {
 public:
-	tcp_server(boost::asio::io_service &, unsigned short);
+	tcp_server(boost::asio::io_service &);
+	void listen( const std::string &, const uint16_t &);
 
 private:
 	void start_accept_();

@@ -5,10 +5,11 @@
 #include "tcp_server.h"
 #include <boost/bind.hpp>
 #include <boost/asio.hpp>
+#include <boost/lexical_cast.hpp>
 
-tcp_server::tcp_server(boost::asio::io_service &io_service, unsigned short port)
-: acceptor_(io_service, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port)) {
-	start_accept_();
+tcp_server::tcp_server(boost::asio::io_service &io_service)
+: acceptor_(io_service){
+
 }
 
 void tcp_server::start_accept_()
@@ -30,4 +31,17 @@ void tcp_server::handle_accept(Connection::shd_ptr new_connection,
 		new_connection->start();
 		start_accept_();
 	}
+}
+
+void tcp_server::listen( const std::string & host, const uint16_t & port)
+{
+	boost::asio::ip::tcp::resolver resolver(acceptor_.get_io_service());
+	boost::asio::ip::tcp::resolver::query query( host, boost::lexical_cast< std::string>( port ) );
+	boost::asio::ip::tcp::endpoint endpoint = *resolver.resolve( query );
+	acceptor_.open( endpoint.protocol() );
+	acceptor_.set_option( boost::asio::ip::tcp::acceptor::reuse_address( false ) );
+	acceptor_.bind( endpoint );
+	acceptor_.listen( boost::asio::socket_base::max_connections );
+	start_accept_();
+	//StartTimer();
 }
