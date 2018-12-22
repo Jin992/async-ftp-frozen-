@@ -16,17 +16,17 @@ public:
 
 	void start();
 	void recv();
-	void send(const char *, size_t);
+	void send(const uint8_t *, size_t);
 	void set_send_status(bool status);
 	boost::asio::ip::tcp::socket &socket();
 
-	virtual void on_send(const char *, size_t) = 0;
-	virtual void on_recv(const char *, size_t) = 0;
+	virtual void on_send(const uint8_t *, size_t) = 0;
+	virtual void on_recv(const uint8_t *, size_t) = 0;
 
 private:
-	void dispatch_send_(const char *, size_t);
+	void dispatch_send_(const uint8_t *, size_t);
 	void dispatch_recv();
-	void start_send_(const char *, size_t);
+	void start_send_(const uint8_t *, size_t);
 	void start_recv_();
 	void handle_send_(const boost::system::error_code &, size_t);
 	void handle_recv_(const boost::system::error_code &, size_t);
@@ -36,8 +36,8 @@ private:
 		buf_size_ = 1024
 	};
 	boost::asio::ip::tcp::socket socket_;
-	char buf_recv_[buf_size_];
-	char buf_send_[buf_size_];
+	uint8_t buf_recv_[buf_size_];
+	uint8_t buf_send_[buf_size_];
 	bool chunk_to_send_;
 
 

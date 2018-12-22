@@ -11,8 +11,8 @@ public:
 	typedef boost::shared_ptr<Connection> shd_ptr;
 
 	static shd_ptr create(boost::asio::io_service &);
-	void on_send(const char *, size_t) override;
-	void on_recv(const char *, size_t) override;
+	void on_send(const uint8_t *, size_t) override;
+	void on_recv(const uint8_t *, size_t) override;
 
 private:
 	explicit Connection(boost::asio::io_service &);

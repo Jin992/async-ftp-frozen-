@@ -29,7 +29,7 @@ void AbstractConnection::start() {
 	recv();
 }
 
-void AbstractConnection::send(const char * buf, size_t len ) {
+void AbstractConnection::send(const uint8_t *buf, size_t len ) {
 
 	dispatch_send_(buf, len);
 }
@@ -42,7 +42,7 @@ void AbstractConnection::set_send_status(bool status) {
 	chunk_to_send_ = status;
 }
 
-void AbstractConnection::dispatch_send_(const char * buf, size_t len)
+void AbstractConnection::dispatch_send_(const uint8_t *buf, size_t len)
 {
 	memset(buf_send_, 0, buf_size_);
 	memcpy(buf_send_, buf, len);
@@ -54,7 +54,7 @@ void AbstractConnection::dispatch_recv() {
 	start_recv_();
 }
 
-void AbstractConnection::start_send_(const char *buf, size_t len) {
+void AbstractConnection::start_send_(const uint8_t *buf, size_t len) {
 	if (chunk_to_send_ && len != 0) {
 		boost::asio::async_write(socket_, boost::asio::buffer(buf, len),
 								 boost::bind(&AbstractConnection::handle_send_, shared_from_this(),
