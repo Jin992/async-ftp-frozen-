@@ -8,6 +8,7 @@ int main() {
     	tcp_server server(io_service);
 
     	server.listen("127.0.0.1", 8081);
+    	server.accept();
 
     	io_service.run();
     }

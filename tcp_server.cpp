@@ -42,6 +42,9 @@ void tcp_server::listen( const std::string & host, const uint16_t & port)
 	acceptor_.set_option( boost::asio::ip::tcp::acceptor::reuse_address( false ) );
 	acceptor_.bind( endpoint );
 	acceptor_.listen( boost::asio::socket_base::max_connections );
-	start_accept_();
 	//StartTimer();
+}
+
+void tcp_server::accept() {
+	start_accept_();
 }
