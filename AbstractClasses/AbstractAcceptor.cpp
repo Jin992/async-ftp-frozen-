@@ -2,28 +2,28 @@
 // Created by jin on 12/21/18.
 //
 
-#include "tcp_server.h"
+#include "AbstractAcceptor.h"
 #include <boost/bind.hpp>
 #include <boost/asio.hpp>
 #include <boost/lexical_cast.hpp>
 
-tcp_server::tcp_server(boost::asio::io_service &io_service)
+AbstractAcceptor::AbstractAcceptor(boost::asio::io_service &io_service)
 : acceptor_(io_service){
 
 }
 
-void tcp_server::start_accept_()
+void AbstractAcceptor::start_accept_()
 {
 	Connection::shd_ptr new_connection =
 			Connection::create(acceptor_.get_io_service());
 
 	acceptor_.async_accept(new_connection->socket(),
-						   boost::bind(&tcp_server::handle_accept,
+						   boost::bind(&AbstractAcceptor::handle_accept,
 						   this, new_connection,
 						   boost::asio::placeholders::error));
 }
 
-void tcp_server::handle_accept(Connection::shd_ptr new_connection,
+void AbstractAcceptor::handle_accept(Connection::shd_ptr new_connection,
 							const boost::system::error_code &error)
 {
 	if (!error)
@@ -33,7 +33,7 @@ void tcp_server::handle_accept(Connection::shd_ptr new_connection,
 	}
 }
 
-void tcp_server::listen( const std::string & host, const uint16_t & port)
+void AbstractAcceptor::listen( const std::string & host, const uint16_t & port)
 {
 	boost::asio::ip::tcp::resolver resolver(acceptor_.get_io_service());
 	boost::asio::ip::tcp::resolver::query query(host, boost::lexical_cast< std::string>(port));
@@ -45,6 +45,6 @@ void tcp_server::listen( const std::string & host, const uint16_t & port)
 	//StartTimer();
 }
 
-void tcp_server::accept() {
+void AbstractAcceptor::accept() {
 	start_accept_();
 }

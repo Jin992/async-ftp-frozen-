@@ -7,6 +7,7 @@
 #include <boost/bind.hpp>
 #include <boost/asio/write.hpp>
 #include <boost/asio.hpp>
+#include <boost/lexical_cast.hpp>
 
 static std::string make_daytime_string()
 {
@@ -89,4 +90,32 @@ void AbstractConnection::handle_recv_(const boost::system::error_code &error, si
 	else {
 		std::cout << "["<< make_daytime_string() << "] Recv failed, error #" << error << " peer disconnected." << std::endl;
 	}
+}
+
+void AbstractConnection::handle_connect( const boost::system::error_code & error )
+{
+	if(error)
+	{
+		/*StartError( error );*/
+	}
+	else
+	{
+		if(socket_.is_open())
+		{
+			on_connect( socket_.remote_endpoint().address().to_string(),
+					socket_.remote_endpoint().port());
+		}
+		else
+		{
+			/*StartError(error);*/
+		}
+	}
+}
+
+void AbstractConnection::connect(const std::string & host,uint16_t port) {
+	boost::system::error_code ec;
+	boost::asio::ip::tcp::resolver resolver(socket_.get_io_service());
+	boost::asio::ip::tcp::resolver::query query( host, boost::lexical_cast< std::string>(port));
+	boost::asio::ip::tcp::resolver::iterator iterator = resolver.resolve(query);
+	socket_.async_connect(*iterator, boost::bind(&AbstractConnection::handle_connect, shared_from_this(), _1 ));
 }

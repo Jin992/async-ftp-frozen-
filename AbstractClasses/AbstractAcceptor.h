@@ -5,11 +5,11 @@
 #ifndef ASIO_ASYNC_FTP_TCP_SERVER_H
 #define ASIO_ASYNC_FTP_TCP_SERVER_H
 
-#include "Connection.h"
+#include "../Connection.h"
 
-class tcp_server {
+class AbstractAcceptor {
 public:
-	explicit tcp_server(boost::asio::io_service &);
+	explicit AbstractAcceptor(boost::asio::io_service &);
 	void listen( const std::string &, const uint16_t &);
 	void accept();
 

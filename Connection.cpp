@@ -34,6 +34,10 @@ void Connection::on_recv(const uint8_t *buf, size_t buf_len) {
 	}
 }
 
+void Connection::on_connect(const std::string &host, uint16_t port) {
+
+}
+
 Connection::Connection(boost::asio::io_service &io_service)
 : AbstractConnection(io_service)
 {}
